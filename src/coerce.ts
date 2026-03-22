@@ -136,7 +136,7 @@ export function inferCoercionHint(schema: ZodTypeAny): CoercionHint {
   if (schema instanceof ZodUnion) {
     return {
       type: "union",
-      options: schema._def.options.map((option) => inferCoercionHint(option))
+      options: schema._def.options.map((option: ZodTypeAny) => inferCoercionHint(option))
     };
   }
 

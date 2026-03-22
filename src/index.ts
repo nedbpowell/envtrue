@@ -33,6 +33,15 @@ type InferSchemaShape<TShape extends AnySchemaShape | undefined> =
       ? { [K in keyof TShape]: TShape[K] extends StandardSchemaV1<any, infer Output> ? Output : never }
       : {};
 
+type ValidationIssue = {
+  path?: ReadonlyArray<PropertyKey | { key: PropertyKey }> | undefined;
+  message: string;
+  code?: string | undefined;
+  expected?: unknown;
+  received?: unknown;
+  validation?: unknown;
+};
+
 function getProcessEnv(): Record<string, string | undefined> {
   if (typeof process !== "undefined" && process.env) {
     return process.env;
@@ -112,7 +121,7 @@ function getIssuePathKey(issue: { path?: ReadonlyArray<PropertyKey | { key: Prop
 
 function collectValidationErrors(
   source: "server" | "client",
-  issues: ReadonlyArray<{ path?: ReadonlyArray<PropertyKey | { key: PropertyKey }> | undefined; message: string; code?: string; expected?: string; received?: string; validation?: string }>,
+  issues: ReadonlyArray<ValidationIssue>,
   rawValues: Record<string, string | undefined>,
   keyForEnv: (key: string) => string
 ): EnvError[] {
@@ -159,9 +168,9 @@ function validateZodShape(
 function validateStandardShape(
   shape: AnySchemaShape,
   input: Record<string, unknown>
-): { data: Record<string, unknown>; issues: Array<{ path?: ReadonlyArray<PropertyKey | { key: PropertyKey }>; message: string }> } {
+): { data: Record<string, unknown>; issues: ValidationIssue[] } {
   const data: Record<string, unknown> = {};
-  const issues: Array<{ path?: ReadonlyArray<PropertyKey | { key: PropertyKey }>; message: string }> = [];
+  const issues: ValidationIssue[] = [];
 
   for (const [key, schema] of Object.entries(shape)) {
     const result = schema["~standard"].validate(input[key]);
@@ -194,7 +203,7 @@ function validateStandardShape(
 function validateShape(
   shape: AnySchemaShape,
   input: Record<string, unknown>
-): { data: Record<string, unknown>; issues: Array<{ path?: ReadonlyArray<PropertyKey | { key: PropertyKey }>; message: string; code?: string; expected?: string; received?: string; validation?: string }> } {
+): { data: Record<string, unknown>; issues: ValidationIssue[] } {
   if (isZodShape(shape)) {
     return validateZodShape(shape, input);
   }
@@ -231,7 +240,7 @@ export function createEnv<
   }
 
   const serverResult = isBrowser
-    ? { data: {}, issues: [] as Array<{ path?: ReadonlyArray<PropertyKey | { key: PropertyKey }>; message: string }> }
+    ? { data: {}, issues: [] as ValidationIssue[] }
     : validateShape(serverShape, serverInput.input);
   const clientResult = validateShape(clientShape, clientInput.input);
   const errors = [
