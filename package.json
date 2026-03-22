@@ -1,6 +1,6 @@
 {
   "name": "envtrue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe environment variables. Loads .env files, validates with Zod/Valibot/ArkType, auto-coerces types. Drop-in dotenv replacement.",
   "repository": {
     "type": "git",
