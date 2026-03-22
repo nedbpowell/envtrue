@@ -65,7 +65,7 @@ describe("parseDotEnv", () => {
 
 describe("loadDotEnvFiles", () => {
   it("returns an empty object when files are missing", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "typeenv-missing-"));
+    const cwd = mkdtempSync(join(tmpdir(), "envtrue-missing-"));
 
     try {
       expect(loadDotEnvFiles({ cwd })).toEqual({});
@@ -75,7 +75,7 @@ describe("loadDotEnvFiles", () => {
   });
 
   it("loads .env then lets .env.local take precedence", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "typeenv-default-"));
+    const cwd = mkdtempSync(join(tmpdir(), "envtrue-default-"));
 
     try {
       writeFileSync(join(cwd, ".env"), "FOO=base\nBAR=shared\n");
@@ -92,7 +92,7 @@ describe("loadDotEnvFiles", () => {
   });
 
   it("supports custom paths", () => {
-    const cwd = mkdtempSync(join(tmpdir(), "typeenv-custom-"));
+    const cwd = mkdtempSync(join(tmpdir(), "envtrue-custom-"));
 
     try {
       writeFileSync(join(cwd, "custom.env"), "FOO=custom\n");

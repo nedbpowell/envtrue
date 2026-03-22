@@ -79,7 +79,7 @@ function formatIssueMessage(issue: ZodIssue, rawValue: string | undefined): stri
 
 function formatErrors(errors: EnvError[]): string {
   const lines = errors.map((error) => `  ${error.key}: ${error.message}`);
-  return ["❌ typeenv: Invalid environment variables:", ...lines].join("\n");
+  return ["❌ envtrue: Invalid environment variables:", ...lines].join("\n");
 }
 
 function isZodShape(shape: AnySchemaShape): shape is ZodRawShape {
@@ -176,7 +176,7 @@ function validateStandardShape(
     const result = schema["~standard"].validate(input[key]);
 
     if (isPromiseLike(result)) {
-      throw new Error("typeenv only supports synchronous Standard Schema validation.");
+      throw new Error("envtrue only supports synchronous Standard Schema validation.");
     }
 
     if (result.issues) {

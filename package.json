@@ -4,11 +4,11 @@
   "description": "Type-safe environment variables. Loads .env files, validates with Zod/Valibot/ArkType, auto-coerces types. Drop-in dotenv replacement.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nedbpowell/typeenv.git"
+    "url": "git+https://github.com/nedbpowell/envtrue.git"
   },
-  "homepage": "https://github.com/nedbpowell/typeenv#readme",
+  "homepage": "https://github.com/nedbpowell/envtrue#readme",
   "bugs": {
-    "url": "https://github.com/nedbpowell/typeenv/issues"
+    "url": "https://github.com/nedbpowell/envtrue/issues"
   },
   "keywords": [
     "dotenv",

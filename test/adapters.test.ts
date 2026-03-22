@@ -9,7 +9,7 @@ describe("adapters", () => {
   it("createNextEnv applies the NEXT_PUBLIC_ prefix", () => {
     const env = createNextEnv({
       env: {
-        NEXT_PUBLIC_SITE_NAME: "typeenv"
+        NEXT_PUBLIC_SITE_NAME: "envtrue"
       },
       client: {
         SITE_NAME: z.string()
@@ -17,7 +17,7 @@ describe("adapters", () => {
     });
 
     expect(env).toEqual({
-      SITE_NAME: "typeenv"
+      SITE_NAME: "envtrue"
     });
   });
 

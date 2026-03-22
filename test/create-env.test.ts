@@ -11,7 +11,7 @@ import { createEnv, type EnvError } from "../index";
 const ORIGINAL_ENV = { ...process.env };
 
 function withTempDir(testFn: (cwd: string) => void): void {
-  const cwd = mkdtempSync(join(tmpdir(), "typeenv-create-env-"));
+  const cwd = mkdtempSync(join(tmpdir(), "envtrue-create-env-"));
 
   try {
     testFn(cwd);
@@ -73,7 +73,7 @@ describe("createEnv", () => {
           }
         })
       ).toThrowError(
-        '❌ typeenv: Invalid environment variables:\n  DATABASE_URL: Required\n  API_KEY: Required'
+        '❌ envtrue: Invalid environment variables:\n  DATABASE_URL: Required\n  API_KEY: Required'
       );
     });
   });
@@ -97,7 +97,7 @@ describe("createEnv", () => {
           }
         })
       ).toThrowError(
-        '❌ typeenv: Invalid environment variables:\n  DATABASE_URL: Expected valid URL, received "localhost"\n  PORT: Expected number, received "abc"\n  NEXT_PUBLIC_ENABLED: Expected boolean, received "maybe"'
+        '❌ envtrue: Invalid environment variables:\n  DATABASE_URL: Expected valid URL, received "localhost"\n  PORT: Expected number, received "abc"\n  NEXT_PUBLIC_ENABLED: Expected boolean, received "maybe"'
       );
     });
   });
@@ -218,7 +218,7 @@ describe("createEnv", () => {
             PORT: v.number()
           }
         })
-      ).toThrowError("❌ typeenv: Invalid environment variables:\n  PORT:");
+      ).toThrowError("❌ envtrue: Invalid environment variables:\n  PORT:");
     });
   });
 
