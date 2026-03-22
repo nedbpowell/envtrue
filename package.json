@@ -1,0 +1,85 @@
+{
+  "name": "typeenv",
+  "version": "0.1.0",
+  "description": "Type-safe environment variables. Loads .env files, validates with Zod/Valibot/ArkType, auto-coerces types. Drop-in dotenv replacement.",
+  "keywords": [
+    "dotenv",
+    "env",
+    "environment",
+    "environment-variables",
+    "typescript",
+    "type-safe",
+    "zod",
+    "valibot",
+    "arktype",
+    "standard-schema",
+    "validation",
+    "config",
+    "configuration",
+    "nextjs",
+    "vite",
+    "hono",
+    "node",
+    "bun",
+    "coercion",
+    "dotenv-replacement",
+    "env-validation",
+    "twelve-factor"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./nextjs": {
+      "types": "./dist/nextjs.d.ts",
+      "import": "./dist/nextjs.js",
+      "require": "./dist/nextjs.cjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.js",
+      "require": "./dist/vite.cjs"
+    },
+    "./hono": {
+      "types": "./dist/hono.d.ts",
+      "import": "./dist/hono.js",
+      "require": "./dist/hono.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "zod": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "valibot": "^1.1.0",
+    "vitest": "^2.1.8",
+    "zod": "^3.25.76"
+  }
+}
