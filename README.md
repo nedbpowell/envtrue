@@ -1,6 +1,10 @@
-# typeenv
+# envtrue
 
-Type-safe environment variables. Loads `.env` files, validates with Zod, auto-coerces types. Drop-in dotenv replacement.
+Type-safe environment variables. Loads `.env` files, validates with Zod/Valibot/ArkType, auto-coerces types. Drop-in dotenv replacement.
+
+[![npm version](https://img.shields.io/npm/v/envtrue)](https://www.npmjs.com/package/envtrue)
+[![npm downloads](https://img.shields.io/npm/dw/envtrue)](https://www.npmjs.com/package/envtrue)
+[![license](https://img.shields.io/npm/l/envtrue)](./LICENSE)
 
 ## The problem
 
@@ -11,41 +15,50 @@ Type-safe environment variables. Loads `.env` files, validates with Zod, auto-co
 ## Install
 
 ```bash
-npm install typeenv zod
+npm install envtrue zod
 ```
 
 ```bash
-pnpm add typeenv zod
+pnpm add envtrue zod
 ```
 
 ```bash
-yarn add typeenv zod
+yarn add envtrue zod
 ```
 
 ## Quick start
 
 ```ts
-import { createEnv } from "typeenv";
+import { createEnv } from "envtrue";
 import { z } from "zod";
+
 const env = createEnv({
-  server: { DATABASE_URL: z.string().url(), PORT: z.number() },
-  client: { API_BASE: z.string().url() },
+  server: {
+    DATABASE_URL: z.string().url(),
+    PORT: z.number(),        // auto-coerced from "3000" → 3000
+    API_KEY: z.string().min(1),
+  },
+  client: {
+    API_BASE: z.string().url(),
+  },
   clientPrefix: "NEXT_PUBLIC_"
 });
-const db: string = env.DATABASE_URL;
-await connect(db, { port: env.PORT });
+
+const db: string = env.DATABASE_URL;  // typed as string
+await connect(db, { port: env.PORT }); // typed as number
 fetch(env.API_BASE);
 ```
 
 ## Why not t3-env?
 
-| Feature | `typeenv` | `t3-env` |
+| Feature | `envtrue` | `t3-env` |
 | --- | --- | --- |
 | Loads `.env` files for you | ✅ | ❌ |
 | Auto-coerces `z.number()`, `z.boolean()`, `z.array()` | ✅ | ❌ |
 | No `runtimeEnv` boilerplate | ✅ | ❌ |
+| Framework-agnostic core | ✅ | ⚠️ |
 
-`typeenv` is optimized for the common case: read `.env`, merge with runtime env, coerce strings into the right primitives, validate once, return typed values. No extra runtime mapping step.
+`envtrue` is optimized for the common case: read `.env`, merge with runtime env, coerce strings into the right primitives, validate once, return typed values. No extra runtime mapping step.
 
 ## Why not the DIY Zod pattern?
 
@@ -57,15 +70,15 @@ The usual Zod setup is a small pile of repeated glue:
 - Split public and private variables by convention
 - Build readable startup errors yourself
 
-`typeenv` keeps the schema but removes the glue. It auto-loads `.env` and `.env.local`, auto-coerces string inputs, separates client variables by prefix, and throws one formatted error with every invalid variable listed at once.
+`envtrue` keeps the schema but removes the glue. It auto-loads `.env` and `.env.local`, auto-coerces string inputs, separates client variables by prefix, and throws one formatted error with every invalid variable listed at once.
 
 ## Framework adapters
 
 | Adapter | Import | Notes |
 | --- | --- | --- |
-| Next.js | `import { createNextEnv } from "typeenv/nextjs"` | Uses `NEXT_PUBLIC_`, skips server validation in browser bundles, skips validation during Next build phases when needed |
-| Vite | `import { createViteEnv } from "typeenv/vite"` | Uses `VITE_`, works with `import.meta.env` or `process.env` |
-| Hono | `import { createHonoEnv } from "typeenv/hono"` | Server-only, supports explicit `env` bindings such as Cloudflare Workers / `c.env` |
+| Next.js | `import { createNextEnv } from "envtrue/nextjs"` | Uses `NEXT_PUBLIC_`, skips server validation in browser bundles, skips validation during Next build phases when needed |
+| Vite | `import { createViteEnv } from "envtrue/vite"` | Uses `VITE_`, works with `import.meta.env` or `process.env` |
+| Hono | `import { createHonoEnv } from "envtrue/hono"` | Server-only, supports explicit `env` bindings such as Cloudflare Workers / `c.env` |
 
 ## API reference
 
@@ -107,17 +120,15 @@ createEnv({
 ### Supported schemas
 
 - Zod raw shapes
-- Standard Schema compatible shapes
-- Valibot
-- ArkType
+- Standard Schema compatible shapes (Valibot, ArkType)
 
 ArkType is supported through Standard Schema compatibility, but is not currently covered by the test suite.
 
 ## Roadmap
 
-- Monorepo support
-- Encrypted `.env` support with `dotenvx` compatibility
-- VS Code extension for `.env` autocomplete and intellisense
+- [ ] Monorepo support
+- [ ] Encrypted `.env` support with `dotenvx` compatibility
+- [ ] VS Code extension for `.env` autocomplete and intellisense
 
 ## License
 
